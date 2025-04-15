@@ -65,8 +65,6 @@ export const getTransaction = async (req, res) => {
 
 export const updateTransaction = async (req, res) => {
   try {
-    console.log("Update request body:", req.body);
-    console.log("Update request params:", req.params);
     const { id } = req.params;
     const { amount, description, category } = req.body;
     if (amount === undefined || amount === null || isNaN(Number(amount))) {

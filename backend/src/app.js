@@ -12,10 +12,12 @@ app.use(cookieParser());
 
 // routes import
 import transactionRoutes from "./routes/transaction.route.js";
+import budgetRoutes from "./routes/budget.route.js";
 
 // routes declaration
 
 app.use("/api/v1/transactions", transactionRoutes);
+app.use("/api/v1/budgets", budgetRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World");

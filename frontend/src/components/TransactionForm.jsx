@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -13,6 +13,20 @@ import {
   addTransaction,
   updateTransaction,
 } from "@/services/transactionService";
+
+// Predefined categories
+const CATEGORIES = [
+  { value: "income", label: "Income" },
+  { value: "food & dining", label: "Food & Dining" },
+  { value: "housing", label: "Housing" },
+  { value: "healthcare", label: "Healthcare" },
+  { value: "education", label: "Education" },
+  { value: "entertainment", label: "Entertainment" },
+  { value: "shopping", label: "Shopping" },
+  { value: "travel", label: "Travel" },
+  { value: "bills & utilities", label: "Bills & Utilities" },
+  { value: "others", label: "Others" },
+];
 
 export default function TransactionForm({
   onSuccess,
@@ -84,13 +98,14 @@ export default function TransactionForm({
     try {
       // Prepare data for API
       const data = {
-        amount: -Math.abs(Number(formData.amount)), // Make it negative for expenses
+        // Make amount negative for expenses, positive for income
+        amount:
+          formData.category === "income"
+            ? Math.abs(Number(formData.amount))
+            : -Math.abs(Number(formData.amount)),
         description: formData.description.trim(),
         category: formData.category,
-        // Don't send date if it's not changed from default
-        ...(formData.date !== new Date().toISOString().split("T")[0] && {
-          date: new Date(formData.date).toISOString(),
-        }),
+        date: new Date(formData.date).toISOString(),
       };
 
       if (isEditing) {
@@ -164,18 +179,13 @@ export default function TransactionForm({
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="income">Income</option>
-              <option value="food & dining">Food & Dining</option>
-              <option value="housing">Housing</option>
-              <option value="healthcare">Healthcare</option>
-              <option value="education">Education</option>
-              <option value="entertainment">Entertainment</option>
-              <option value="shopping">Shopping</option>
-              <option value="travel">Travel</option>
-              <option value="bills & utilities">Bills & Utilities</option>
-              <option value="others">Others</option>
+              {CATEGORIES.map((category) => (
+                <option key={category.value} value={category.value}>
+                  {category.label}
+                </option>
+              ))}
             </select>
           </div>
 

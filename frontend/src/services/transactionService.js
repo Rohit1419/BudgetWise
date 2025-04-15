@@ -1,28 +1,16 @@
-import axios from "axios";
-
-const API_URL = "http://localhost:5000/api/v1/transactions";
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1/transactions";
 
 // Get all transactions
 export const getAllTransactions = async () => {
   try {
-    const response = await axios.get(`${API_URL}/all-transactions`);
-    return response.data;
+    const response = await fetch(`${API_URL}/all-transactions`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    return await response.json();
   } catch (error) {
     console.error("Error fetching transactions:", error);
-    throw error;
-  }
-};
-
-// Add a new transaction
-export const addTransaction = async (transaction) => {
-  try {
-    const response = await axios.post(
-      `${API_URL}/add-transactions`,
-      transaction
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error adding transaction:", error);
     throw error;
   }
 };
@@ -30,24 +18,57 @@ export const addTransaction = async (transaction) => {
 // Get a single transaction
 export const getTransaction = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/transaction/${id}`);
-    return response.data;
+    const response = await fetch(`${API_URL}/transaction/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    return await response.json();
   } catch (error) {
-    console.error("Error fetching transaction:", error);
+    console.error(`Error fetching transaction ${id}:`, error);
+    throw error;
+  }
+};
+
+// Add a new transaction
+export const addTransaction = async (transactionData) => {
+  try {
+    const response = await fetch(`${API_URL}/add-transactions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(transactionData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error adding transaction:", error);
     throw error;
   }
 };
 
 // Update a transaction
-export const updateTransaction = async (id, transaction) => {
+export const updateTransaction = async (id, transactionData) => {
   try {
-    const response = await axios.put(
-      `${API_URL}/transaction/${id}`,
-      transaction
-    );
-    return response.data;
+    const response = await fetch(`${API_URL}/transaction/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(transactionData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    return await response.json();
   } catch (error) {
-    console.error("Error updating transaction:", error);
+    console.error(`Error updating transaction ${id}:`, error);
     throw error;
   }
 };
@@ -55,10 +76,34 @@ export const updateTransaction = async (id, transaction) => {
 // Delete a transaction
 export const deleteTransaction = async (id) => {
   try {
-    const response = await axios.delete(`${API_URL}/transactions/${id}`);
-    return response.data;
+    const response = await fetch(`${API_URL}/transactions/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    return await response.json();
   } catch (error) {
-    console.error("Error deleting transaction:", error);
+    console.error(`Error deleting transaction ${id}:`, error);
+    throw error;
+  }
+};
+
+// Get transactions by category
+export const getTransactionsByCategory = async (category) => {
+  try {
+    const response = await fetch(`${API_URL}/transactions/${category}`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(
+      `Error fetching transactions for category ${category}:`,
+      error
+    );
     throw error;
   }
 };
