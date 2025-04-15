@@ -11,15 +11,24 @@ import { Transaction } from "../models/transaction.model.js";
 
 export const addTransaction = async (req, res) => {
   try {
-    const { amount, description } = req.body;
+    const { amount, description, category } = req.body;
 
-    if ([amount, description].some((field) => !field || field.trim() === "")) {
+    if (amount === undefined || amount === null || isNaN(Number(amount))) {
+      res
+        .status(400)
+        .json({ message: "Amount is required and must be a number" });
+    }
+
+    if (
+      [description, category].some((field) => !field || field.trim() === "")
+    ) {
       throw new Error(400, "All fields are required");
     }
 
     const transaction = await Transaction.create({
       amount,
       description,
+      category,
     });
 
     res.status(201).json({
@@ -32,7 +41,7 @@ export const addTransaction = async (req, res) => {
   }
 };
 
-export const getALLTansactions = async (req, res) => {
+export const getAllTansactions = async (req, res) => {
   try {
     const transactions = await Transaction.find();
     res.status(200).json(transactions);
@@ -41,23 +50,44 @@ export const getALLTansactions = async (req, res) => {
   }
 };
 
-export const updateTransaction = async (req, res) => {
+export const getTransaction = async (req, res) => {
   try {
     const { id } = req.params;
-    const { amount, description } = req.body;
-    if ([amount, description].some((field) => !field || field.trim() === "")) {
-      throw new Error(400, "All fields are required");
+    const transaction = await Transaction.findById(id);
+    if (!transaction) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+    res.status(200).json(transaction);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+};
+
+export const updateTransaction = async (req, res) => {
+  try {
+    console.log("Update request body:", req.body);
+    console.log("Update request params:", req.params);
+    const { id } = req.params;
+    const { amount, description, category } = req.body;
+    if (amount === undefined || amount === null || isNaN(Number(amount))) {
+      res
+        .status(400)
+        .json({ message: "Amount is required and must be a number" });
+    }
+    if (
+      [description, category].some((field) => !field || field.trim() === "")
+    ) {
+      res.status(400).json({ message: "All fields are required" });
     }
     const updatedTransaction = await Transaction.findByIdAndUpdate(
       id,
       {
         amount,
         description,
+        category,
       },
       { new: true, runValidators: true }
     );
-
-    console.log(updatedTransaction);
 
     if (!updatedTransaction) {
       return res.status(404).json({ message: "Transaction not found" });
@@ -80,6 +110,22 @@ export const deleteTransaction = async (req, res) => {
       return res.status(404).json({ message: "Transaction not found" });
     }
     res.status(200).json({ message: "Transaction deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+};
+
+export const getCategoryWiseTransactions = async (req, res) => {
+  try {
+    const { category } = req.params;
+
+    const transactions = await Transaction.find({ category });
+    if (!transactions) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+    res.status(200).json(transactions);
+
+    res.status(200).json(transactions);
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
