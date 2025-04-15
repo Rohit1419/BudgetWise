@@ -6,16 +6,22 @@ dotenv.config({
   path: ".env",
 });
 
+// Connect to database
 dbConnect()
   .then(() => {
-    app.on("error", (error) => {
-      console.log("Error: ", error);
-    });
-
-    app.listen(process.env.PORT || 5000, () => {
-      console.log(`Server is listining on port : ${process.env.PORT}`);
-    });
+    console.log("Database connected successfully");
   })
   .catch((error) => {
-    console.log(error);
+    console.log("Database connection error:", error);
   });
+
+// For local development
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server is listening on port: ${PORT}`);
+  });
+}
+
+// Export the Express app for Vercel
+export default app;
