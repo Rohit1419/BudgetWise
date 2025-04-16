@@ -1,10 +1,11 @@
-const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1/transactions";
+const API_URL = import.meta.env.VITE_API_URL || "/api/v1";
+
+// Rest of your code remains the same
 
 // Get all transactions
 export const getAllTransactions = async () => {
   try {
-    const response = await fetch(`${API_URL}/all-transactions`);
+    const response = await fetch(`${API_URL}/transactions/all-transactions`);
     if (!response.ok) {
       throw new Error(`Error: ${response.status}`);
     }
@@ -18,7 +19,7 @@ export const getAllTransactions = async () => {
 // Get a single transaction
 export const getTransaction = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/transaction/${id}`);
+    const response = await fetch(`${API_URL}/transactions/transaction/${id}`);
     if (!response.ok) {
       throw new Error(`Error: ${response.status}`);
     }
@@ -32,7 +33,7 @@ export const getTransaction = async (id) => {
 // Add a new transaction
 export const addTransaction = async (transactionData) => {
   try {
-    const response = await fetch(`${API_URL}/add-transactions`, {
+    const response = await fetch(`${API_URL}/transactions/add-transactions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +55,7 @@ export const addTransaction = async (transactionData) => {
 // Update a transaction
 export const updateTransaction = async (id, transactionData) => {
   try {
-    const response = await fetch(`${API_URL}/transaction/${id}`, {
+    const response = await fetch(`${API_URL}/transactions/transaction/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -76,7 +77,7 @@ export const updateTransaction = async (id, transactionData) => {
 // Delete a transaction
 export const deleteTransaction = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/transactions/${id}`, {
+    const response = await fetch(`${API_URL}/transactions/transactions/${id}`, {
       method: "DELETE",
     });
 
@@ -94,7 +95,9 @@ export const deleteTransaction = async (id) => {
 // Get transactions by category
 export const getTransactionsByCategory = async (category) => {
   try {
-    const response = await fetch(`${API_URL}/transactions/${category}`);
+    const response = await fetch(
+      `${API_URL}/transactions/transactions/${category}`
+    );
     if (!response.ok) {
       throw new Error(`Error: ${response.status}`);
     }

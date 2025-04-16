@@ -182,7 +182,7 @@ export default function DashboardPage() {
           isLoading={isLoading}
           onEdit={handleEditTransaction}
           onTransactionChange={fetchTransactions}
-          limit={5} // Show only 5 most recent transactions
+          limit={10} //Show only 5 most recent transactions
         />
         {transactions.length > 5 && (
           <div className="mt-4 text-center">

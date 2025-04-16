@@ -1,11 +1,10 @@
-const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1/budgets";
+const API_URL = import.meta.env.VITE_API_URL || "/api/v1/";
 
 // Get all budgets for a specific month/year
 export const getMonthlyBudgets = async (month, year) => {
   try {
     const response = await fetch(
-      `${API_URL}/monthly?month=${month}&year=${year}`
+      `${API_URL}/budgets/monthly?month=${month}&year=${year}`
     );
     if (!response.ok) {
       throw new Error(`Error: ${response.status}`);
@@ -20,7 +19,7 @@ export const getMonthlyBudgets = async (month, year) => {
 // Set budget for a category
 export const setBudget = async (budgetData) => {
   try {
-    const response = await fetch(`${API_URL}/set`, {
+    const response = await fetch(`${API_URL}/budgets/set`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +41,7 @@ export const setBudget = async (budgetData) => {
 // Delete a budget
 export const deleteBudget = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/budgets/${id}`, {
       method: "DELETE",
     });
 

@@ -4,8 +4,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon  -r dotenv/config --experimental-json-modules  src/index.js"
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "build": "cd frontend && npm run build",
+    "start": "npm start",
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "javascript",

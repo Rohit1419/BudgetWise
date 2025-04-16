@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   addTransaction,
-  getAllTansactions,
+  getAllTransactions,
   updateTransaction,
   deleteTransaction,
   getTransaction,
@@ -11,7 +11,7 @@ import {
 const router = Router();
 
 router.route("/add-transactions").post(addTransaction);
-router.route("/all-transactions").get(getAllTansactions);
+router.route("/all-transactions").get(getAllTransactions);
 router.route("/transaction/:id").get(getTransaction);
 router.route("/transaction/:id").put(updateTransaction);
 router.route("/transactions/:id").delete(deleteTransaction);

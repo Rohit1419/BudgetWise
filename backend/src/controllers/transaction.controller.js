@@ -41,7 +41,7 @@ export const addTransaction = async (req, res) => {
   }
 };
 
-export const getAllTansactions = async (req, res) => {
+export const getAllTransactions = async (req, res) => {
   try {
     const transactions = await Transaction.find();
     res.status(200).json(transactions);
